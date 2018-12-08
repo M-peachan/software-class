@@ -1,0 +1,224 @@
+\documentclass[a4, dvipdfmx, uplatex]{jsarticle}
+
+\usepackage{url}
+\usepackage{here}
+\usepackage{ascmac}
+\usepackage[dvipdfm, usenames]{color}
+\usepackage[dvipdfmx]{graphicx}
+
+\title{
+\vspace{30mm}
+{\bf 無人売店システム} \\ \vspace{5mm}
+{\bf MUJIN } \\ \vspace{5mm}　\\
+{\bf 内部設計書 }
+\vspace{90mm}
+}
+
+\author {
+\vspace{5mm}
+PAKUTY
+}
+\begin{document}
+\maketitle
+\newpage
+\tableofcontents
+\newpage
+
+\section{はじめに}
+
+\section{ネットワーク設計}
+図\ref{img: network}は本システム全体のネットワーク構成を表したものです。
+
+基本的にすべての通信はTCP/IPを用いて行います。また、各カメラ・センサーと制御端末間の通信では有線または無線LANを通じて通信を行います。AWS(Amazon Web Service)の各クラウドサービスとの通信にはインターネットに接続されている端末を用います。
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width = 15cm]{./img/network.png}
+  \caption{ネットワーク構成}
+  \label{img: network}
+\end{figure}
+
+\section{モジュール設計書}
+\subsection{モジュール構成}
+本システムのモジュール構成をフローチャートで表したものを図()に示します。
+
+\subsection{モジュール仕様}
+各フェーズにおけるメソッドの一覧を以下に示します。
+
+\begin{itemize}
+\item ページ遷移(Web)　\\
+
+\begin{itemize}
+\item get\_login() \\
+ログイン画面に遷移するためのメソッド。
+ログイン失敗時に再度読み込む場合にも使用する \\
+　引数：なし \\
+　戻り値：なし \\
+
+\item get\_home() \\
+他ページからHome画面に移動する際に使用するメソッド \\
+　引数：なし \\
+　戻り値：なし \\
+
+\item get\_history() \\
+他ページからHistory画面に移動する際に使用するメソッド \\
+　引数：なし \\
+　戻り値：なし \\
+
+\item get\_items() \\
+他ページからItems画面に移動する際に使用するメソッド \\
+　引数：なし \\
+　戻り値：なし \\
+
+\item get\_requests() \\
+他ページからRequests画面に移動する際に使用するメソッド \\
+　引数：なし \\
+　戻り値：なし \\
+
+\item get\_user\_list() \\
+他ページからUserList画面に移動する際に使用するメソッド。このメソッドは管理者ユーザがログインした際にのみ呼び出すことが可能となります。\\
+　引数：なし \\
+　戻り値：なし \\
+
+\item get\_user\_add() \\
+UserSettings画面からAdd画面に移動する際に使用するメソッド \\
+　引数：なし \\
+　戻り値：なし \\
+
+\item get\_user\_delete() \\
+UserListからdelete画面に移動する際に使用するメソッド \\
+　引数：なし \\
+　戻り値：なし \\
+
+\item get\_user\_update() \\
+UserListからupdate画面に移動する際に使用するメソッド \\
+　引数：なし \\
+　戻り値：なし \\
+\end{itemize}
+
+\item ページ遷移(商品棚備え付けタブレット端末)
+
+\begin{itemize}
+\item get\_waiting() \\
+購入完了時や一定時間、動作が行われなかった際に待機画面に遷移するためのメソッド \\
+　引数：なし \\
+　戻り値：なし \\
+
+\item get\_confirm() \\
+購入確認画面に遷移するためのメソッド \\
+　引数：purchase\_id \\
+　戻り値：なし \\
+
+\item get\_success() \\
+購入確認終了後、購入成功画面に遷移するためのメソッド　\\
+　引数：なし \\
+　戻り値：なし \\
+
+\item get\_lookcam() \\
+購入確認にて顔認識が失敗し、ユーザが「NG」を選択すると表示されるカメラ注目を促す文が記載されている画面に遷移するためのメソッド \\
+%日本語変だから要修正
+　引数：なし \\
+　戻り値：なし \\
+
+\item get\_user\_select() \\
+顔認識が三回失敗した際に、ユーザリストからユーザ選択する際に表示される画面に遷移するためのメソッド。　\\
+　引数：なし \\
+　戻り値：なし \\
+\end{itemize}
+
+\item 商品棚内部カメラシステム \\
+
+\begin{itemize}
+\item get\_img() \\
+商品取り出し前と後の状態を記憶しておくための画像を取得するためのメソッド。 \\
+　引数：なし \\
+　戻り値：inner\_img \\
+\end{itemize}
+
+\item 商品棚外部カメラシステム \\
+
+\begin{itemize}
+\item get\_img() \\
+ユーザの顔の画像を取得するためのメソッド。前述の商品棚内部の画像を取得するためのモジュールと同じものである。 \\
+　引数：なし \\
+　戻り値：face\_img \\
+\end{itemize}
+
+\item 商品棚外部マグネットシステム \\
+
+\begin{itemize}
+\item get\_state() \\
+扉の開閉状態を取得するためのメソッド。 \\
+　引数：なし \\
+　戻り値：door\_state \\
+
+\item start\_alerm() \\
+アラームを鳴らすためのメソッド。 \\
+%明確な目的が分からなかったため要変更
+　引数：なし \\
+　戻り値：なし \\
+
+\item stop\_alerm() \\
+アラームを止めるためのメソッド。 \\
+%明確な目的が分からなかったため要変更
+　引数：なし \\
+　戻り値：なし \\
+
+\end{itemize}
+
+\item 商品棚中央サーバ \\
+
+\begin{itemize}
+\item get\_inner\_img() \\
+商品棚内を撮影した画像を取得するためのメソッド。 \\
+　引数：なし \\
+　戻り値：inner\_img \\
+
+\item get\_face\_img() \\
+顔写真を取得するためのメソッド。 \\
+　引数： なし \\
+　戻り値： face\_img\\
+
+\item get\_door\_state() \\
+扉の開閉状態を取得するためのメソッド。\\
+　引数： なし \\
+　戻り値： door\_state \\
+
+\item face\_monitor() \\
+カメラに顔が映っているかの状態を監視するメソッド。同時に扉の状態も取得する。 \\
+　引数： なし \\
+　戻り値： is\_recognize(boolean型), user\_id \\
+
+\item get\_img\_diff() \\
+商品取り出し前後の二つの内部画像から差分を出すメソッド。 \\
+　引数：inner\_img1, inner\_img2 \\
+　戻り値： diff\_inner\_img \\
+
+\item get\_ids\_from\_img() \\
+差分の画像から取り出された商品を検出し、商品IDを取得するメソッド。 \\
+　引数： diff\_inner\_img \\
+　戻り値： item\_ids \\
+
+\item
+　引数： \\
+　戻り値： \\
+
+\item
+　引数： \\
+　戻り値： \\
+
+\item
+　引数： \\
+　戻り値： \\
+\end{itemize}
+
+\begin{itemize}
+\item
+　引数： \\
+　戻り値： \\
+\end{itemize}
+
+\end{itemize}
+
+
+\end{document}
